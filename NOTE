@@ -1,0 +1,547 @@
+Thurs 4/6/20 EJS L-280 -283 ( To DO LIST NOTE) STEP(1-7)
+user@Michael-MacBook-Pro-15 ~ % cd desktop
+user@Michael-MacBook-Pro-15 desktop % mkdir todolist-v1
+user@Michael-MacBook-Pro-15 desktop % cd todolist-v1
+user@Michael-MacBook-Pro-15 todolist-v1 % touch index.html app.js NOTE
+user@Michael-MacBook-Pro-15 todolist-v1 % npm init
+This utility will walk you through creating a package.json file.
+It only covers the most common items, and tries to guess sensible defaults.
+
+See `npm help json` for definitive documentation on these fields
+and exactly what they do.
+
+Use `npm install <pkg>` afterwards to install a package and
+save it as a dependency in the package.json file.
+
+Press ^C at any time to quit.
+package name: (todolist-v1)
+version: (1.0.0)
+description: todolist-v1
+entry point: (app.js)
+test command:
+git repository:
+keywords:
+author: Michaeloha
+license: (ISC)
+About to write to /Users/user/Desktop/todolist-v1/package.json:
+
+{
+  "name": "todolist-v1",
+  "version": "1.0.0",
+  "description": "todolist-v1",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michaeloha",
+  "license": "ISC"
+}
+
+
+Is this OK? (yes)
+user@Michael-MacBook-Pro-15 todolist-v1 % npm install express body-parser
+npm notice created a lockfile as package-lock.json. You should commit this file.
+npm WARN todolist-v1@1.0.0 No repository field.
+
++ body-parser@1.19.0
++ express@4.17.1
+added 50 packages from 37 contributors and audited 50 packages in 10.112s
+found 0 vulnerabilities
+
+
+
+   ╭────────────────────────────────────────────────────────────────╮
+   │                                                                │
+   │      New patch version of npm available! 6.14.4 → 6.14.5       │
+   │   Changelog: https://github.com/npm/cli/releases/tag/v6.14.5   │
+   │               Run npm install -g npm to update!                │
+   │                                                                │
+   ╰────────────────────────────────────────────────────────────────╯
+
+user@Michael-MacBook-Pro-15 todolist-v1 % atom .
+user@Michael-MacBook-Pro-15 todolist-v1 %
+
+
+
+
+
+
+
+on APP.JS ( Starting file)
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const app = express();
+
+app.get("/", function(req, res){
+  res.send("hello");
+});
+
+app.listen(3000, function(){
+  console.log("Server started on Port 3000");
+});
+
+
+
+Part 2 ( send a single html to router)
+//jshint esversion:6
+
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const app = express();
+
+app.get("/", function(req, res){
+
+var today = new Date();
+
+if(today.getDay() === 6 || today.getDate() === 0){
+  res.send("Yay it's the weekend");
+} else{
+  res.send("Boo! I have to work!");
+}
+});
+
+app.listen(3000, function(){
+  console.log("Server started on Port 3000");
+});
+
+
+
+// step 3 ( if you want to send many html using res.send)
+//jshint esversion:6
+
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const app = express();
+
+app.get("/", function(req, res){
+
+var today = new Date();
+var currentDay = today.getDate();
+
+if(currentDay === 6 || currentDay === 0){
+  res.write("<h1>Yay it's the weekend!</h1>");
+} else{
+  res.write("<p> It's not weekend.</p>")
+  res.write("<h1>Boo! I have to work!</h1>");
+  res.send();
+}
+});
+
+app.listen(3000, function(){
+  console.log("Server started on Port 3000");
+});
+
+
+  Step 4 - if you want to send the html file to be included in app.js
+  //jshint esversion:6
+
+  const express = require('express');
+  const bodyParser = require('body-parser');
+
+  const app = express();
+
+  app.get("/", function(req, res){
+
+  var today = new Date();
+  var currentDay = today.getDate();
+
+  if(currentDay === 6 || currentDay === 0){
+      res.sendFile(__dirname + "/weekend.html");
+  } else{
+    res.sendFile(__dirname + "/weekday.html");
+  }
+
+
+  });
+
+  app.listen(3000, function(){
+    console.log("Server started on Port 3000");
+  });
+
+Note 5.
+ejs.co website ( using ejs with express)
+. 1st -  install ejs ($ npm i ejs)
+
+
+
+STEP 6 app.js ( folder called views was created and list.ejs file was created inside it)
+//jshint esversion:6
+
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const app = express();
+
+app.set("view engine", "ejs");
+
+app.get("/", function(req, res){
+
+var today = new Date();
+var currentDay = today.getDate();
+var day = "";
+
+if(currentDay === 6 || currentDay === 0){
+  day = "Weekend";
+} else{
+  day = "Weekday";
+}
+
+  res.render("list",{kindOfDay: day});
+
+});
+
+app.listen(3000, function(){
+  console.log("Server started on Port 3000");
+});
+
+list.ejs
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>TO Do List</title>
+  </head>
+  <body>
+    <h1>It's a <%= kindOfDay %>!</h1>
+
+
+  </body>
+  <footer>
+    <p class= produced> Produced By: Michaeloha © Copyright June, 2020 My To Do List.</p>
+
+  </footer>
+</html>
+
+
+
+STEP 7 .. For it to show days (MONDAY... and so on )using switch
+//jshint esversion:6
+
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const app = express();
+
+app.set("view engine", "ejs");
+
+app.get("/", function(req, res) {
+
+  var today = new Date();
+  var currentDay = today.getDate();
+  var day = "";
+
+  switch (currentDay) {
+    case 0:
+      day = "Sunday"
+      break;
+
+    case 1:
+      day = "Monday"
+      break;
+
+    case 2:
+      day = "Tuesday"
+      break;
+
+    case 3:
+      day = "Wednesday"
+      break;
+    case 4:
+      day = "Thursday"
+      break;
+    case 5:
+      day = "Friday"
+      break;
+    case 6:
+      day = "Saturday"
+      break;
+    default:
+    console.log("Error: current day is equal:" + currentDay);
+  }
+
+  res.render("list", {
+    kindOfDay: day
+  });
+
+});
+
+app.listen(3000, function() {
+  console.log("Server started on Port 3000");
+});
+
+
+
+
+L-284 RUNING CODES INSIDE EJS TEMPLATE
+list.ejs file ( went to ejs.co and to the tag session when you screw down
+and use Scriptlet see below (<% %>) for each line of code
+(<% 'Scriptlet' tag, for control-flow, no output))
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>TO Do List</title>
+</head>
+
+<body>
+  <%  if(kindOfDay === "Saturday" || kindOfDay == "Sunday"){ %>
+  <h1 style="color: purple"><%= kindOfDay %> ToDo List</h1>
+  <% } else { %>
+  <h1 style="color: blue"><%= kindOfDay %> ToDo List</h1>
+  <% } %>
+
+</body>
+<footer>
+  <div style="margin-top: 200px"></div>
+  <p style="text-align: center> Produced By: Michaeloha © Copyright June, 2020 My To Do List.</p>
+</footer>
+
+</html>
+
+
+L-285 Passing Data from Yours Webpage to Your Server
+// app.js
+
+//jshint esversion:6
+
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const app = express();
+
+var items = ["Buy Food", "Cook Food", "Eat Food"]; //
+
+app.set("view engine", "ejs");
+
+app.use(bodyParser.urlencoded({extended: true}));
+
+app.get("/", function(req, res) {
+
+  var today = new Date();
+  var currentDay = today.getDate();
+  var day = "";
+
+  var options = {
+    weekday:"long",
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  };
+
+  var day = today.toLocaleDateString("en-US", options);
+
+  res.render("list", {kindOfDay: day, newListItems: items});
+
+});
+
+app.post("/", function(req,res){
+  var item = req.body.newItem;
+
+  items.push(item);
+
+  res.redirect("/");
+
+});
+
+app.listen(3000, function() {
+  console.log("Server started on Port 3000");
+});
+
+// list.ejs file
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>TO Do List</title>
+</head>
+
+<body>
+  <h1> <%= kindOfDay %>.</h1>
+
+  <ul>
+
+    <% for (var i = 0; i < newListItems.length; i++){ %>
+    <li><%= newListItems[i] %></li>
+
+    <% } %>
+  </ul>
+
+  <form class="" action="/" method="post">
+
+    <input type="text" name="newItem">
+
+    <button type="submit" name="button">Add</button>
+  </form>
+
+</body>
+<footer>
+  <div style="margin-top: 500px"></div>
+  <p style="text-align: center; color: grey"> Produced By: Michaeloha © Copyright: June, 2020. My To Do List.</p>
+</footer>
+
+</html>
+
+
+
+//Monday 8/6/20 L=-286 - SCOPE L-287 (Adding pre CSS style to our website)
+1. create a public folder, then add the css to it and ask the app.js to app.use()
+2.https://www.w3schools.com/cssref/css_selectors.asp
+see note below...
+list.ejs ( we add the css link) <link rel="stylesheet" href="css/styles.css">
+
+<!DOCTYPE html>
+  <html lang="en" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <title>TO Do List</title>
+    <link rel="stylesheet" href="css/styles.css">  // added to ejs file
+  </head>
+
+  <body>
+    <h1> <%= kindOfDay %>.</h1>
+
+    <ul>
+
+      <% for (var i = 0; i < newListItems.length; i++){ %>
+      <li><%= newListItems[i] %></li>
+
+      <% } %>
+    </ul>
+
+    <form class="" action="/" method="post">
+
+      <input type="text" name="newItem">
+
+      <button type="submit" name="button">Add</button>
+    </form>
+
+  </body>
+  <footer>
+    <div style="margin-top: 500px"></div>
+    <p style="text-align: center; color: grey; font-family: Indie Flower,
+      cursive;"> Produced By: Michaeloha © Copyright: June, 2020. My To Do List.</p>
+
+  </footer>
+
+  </html>
+
+
+STEP  2B
+  //complete ejs after applying css css_selectors
+  <!DOCTYPE html>
+  <html lang="en" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <title>TO Do List</title>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+
+  <body>
+
+    <div class="box" id="heading">
+      <h1> <%= kindOfDay %>.</h1>
+    </div>
+
+    <div class="box">
+      <% for (var i = 0; i < newListItems.length; i++){ %>
+      <div class="item">
+        <input type="checkbox">
+        <p><%= newListItems[i] %></p>
+      </div>
+
+      <% } %>
+
+      <form class="item" action="/" method="post">
+        <input type="text" name="newItem" placeholder="New Item" autocomplete="off">
+        <button type="submit" name="button">+</button>
+      </form>
+    </div>
+
+
+
+  </body>
+  <footer>
+    <div style="margin-top: 500px"></div>
+    <p style="text-align: center; color: grey; font-family: Indie Flower,
+      cursive;"> Produced By: Michaeloha © Copyright: June, 2020. My To Do List.</p>
+
+  </footer>
+
+  </html>
+
+
+STEP 2
+app.js
+//jshint esversion:6
+
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const app = express();
+
+let items = ["Buy Food", "Cook Food", "Eat Food"]; //
+
+app.set("view engine", "ejs");
+
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static("public"));    // app.use to use css
+app.get("/", function(req, res) {
+
+  let today = new Date();
+  // let currentDay = today.getDate();
+  // let day = "";
+
+  let options = {
+    weekday:"long",
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  };
+
+  let day = today.toLocaleDateString("en-US", options);
+
+  res.render("list", {kindOfDay: day, newListItems: items});
+
+});
+
+app.post("/", function(req,res){
+  let item = req.body.newItem;
+
+  items.push(item);
+
+  res.redirect("/");
+
+});
+
+app.listen(3000, function() {
+  console.log("Server started on Port 3000");
+});
+
+
+
+L-288 Understanding Template VS. Layout
+<%- include('header'); -%> <%- include('footer'); -%> see about file created, header and footer removed from ejs,
+this allow you to add same styles to as many files created in one project.
+https://ejs.co/
+Layouts
+<%- include('header'); -%>
+<h1>
+  Title
+</h1>
+<p>
+  My page
+</p>
+<%- include('footer'); -%>
+
+
+
+L- 289: Understanding Node_Module exports
+module object: https://nodejs.org/api/modules.html#modules_the_module_object
